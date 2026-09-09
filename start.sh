@@ -13,4 +13,3 @@ else
     docker build -t $docker_name ./docker-app
     docker run $docker_name
 fi
-    

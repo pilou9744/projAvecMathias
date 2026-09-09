@@ -1,18 +1,17 @@
+```bat
 @echo off
-set CONTAINER_NAME=monapp
 
-docker container inspect %CONTAINER_NAME% >nul 2>&1
+set "docker_name=monapp"
 
-if %errorlevel%==0 (
-echo Le conteneur %CONTAINER_NAME% existe deja.
-echo Demarrage du conteneur...
-docker start %CONTAINER_NAME%
-) else (
-echo Le conteneur %CONTAINER_NAME% n'existe pas.
-echo Creation et demarrage du conteneur...
-docker run -d --name %CONTAINER_NAME% monapp
+for /f "tokens=1,2" %%A in ('docker ps -a --filter "name=%docker_name%" --format "{{.ID}} {{.Image}}"') do (
+    set "container_id=%%A"
+    set "image=%%B"
 )
 
-echo.
-echo Termine.
-pause
+if "%image%"=="%docker_name%" (
+    docker start %container_id%
+) else (
+    docker build -t %docker_name% ./docker-app
+    docker run %docker_name%
+)
+```
