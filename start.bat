@@ -1,17 +1,23 @@
-```bat
 @echo off
 
-set "docker_name=monapp"
+set "image_name=monapp"
+set "container_id="
 
-for /f "tokens=1,2" %%A in ('docker ps -a --filter "name=%docker_name%" --format "{{.ID}} {{.Image}}"') do (
+for /f "tokens=1" %%A in ('docker ps -a --filter "ancestor=%image_name%" --format "{{.ID}}"') do (
     set "container_id=%%A"
-    set "image=%%B"
 )
 
-if "%image%"=="%docker_name%" (
-    docker start %container_id%
+if defined container_id (
+    echo Conteneur utilisant l'image %image_name% trouve.
+    echo Demarrage du conteneur %container_id%...
+    docker start -a %container_id%
 ) else (
-    docker build -t %docker_name% ./docker-app
-    docker run %docker_name%
+    echo Aucun conteneur utilisant l'image %image_name% trouve.
+    echo Construction de l'image...
+    docker build -t %image_name% ./docker-app
+
+    echo Lancement de l'application...
+    docker run %image_name%
 )
-```
+
+pause
