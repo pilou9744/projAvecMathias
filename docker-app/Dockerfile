@@ -4,7 +4,12 @@ RUN apk add postgresql18 postgresql18-contrib go
 
 RUN go install github.com/mingrammer/flog@latest
 
+RUN install -d -o postgres -g postgres /run/postgresql
+
 COPY init-postgres.sh /init-postgres.sh
+
+# Accepte le script aussi bien avec des fins de ligne Windows (CRLF) que Linux (LF).
+RUN sed -i 's/\r$//' /init-postgres.sh
 
 USER postgres
 

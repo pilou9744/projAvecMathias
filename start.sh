@@ -1,15 +1,17 @@
-docker_name=monapp
+#!/bin/sh
 
-ps=`docker ps -a | grep $docker_name`
+image_name=monapp
+container_id=$(docker ps -aq --filter "ancestor=$image_name" | head -n 1)
 
-image=`echo $ps | awk '{print $2}'`
-
-container_id=`echo $ps | awk '{print $1}'`
-
-if [ "$image" = "$docker_name" ]
-then
-    docker start $container_id
+if [ -n "$container_id" ]; then
+    echo "Conteneur utilisant l'image $image_name trouve."
+    echo "Demarrage du conteneur $container_id..."
+    docker start -a "$container_id"
 else
-    docker build -t $docker_name ./docker-app
-    docker run $docker_name
+    echo "Aucun conteneur utilisant l'image $image_name trouve."
+    echo "Construction de l'image..."
+    docker build -t "$image_name" ./docker-app || exit $?
+
+    echo "Lancement de l'application..."
+    docker run "$image_name"
 fi
