@@ -8,7 +8,8 @@ RUN go install github.com/mingrammer/flog@latest \
 
 RUN install -d -o postgres -g postgres /run/postgresql
 
-COPY boot-env.sh /boot-env.sh
+COPY docker-app/boot-env.sh /boot-env.sh
+COPY shema.sql /schema.sql
 
 # Accepte le script aussi bien avec des fins de ligne Windows (CRLF) que Linux (LF).
 RUN sed -i 's/\r$//' /boot-env.sh

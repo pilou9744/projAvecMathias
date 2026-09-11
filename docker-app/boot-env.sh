@@ -12,4 +12,6 @@ until pg_isready -q; do
     sleep 1
 done
 
+psql --dbname=postgres --file=/schema.sql
+
 flog -f rfc3164 -l -d 2

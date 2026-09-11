@@ -1,3 +1,5 @@
 services:
   app:
-    build: .
+    build:
+      context: ..
+      dockerfile: docker-app/Dockerfile
