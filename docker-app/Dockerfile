@@ -1,16 +1,18 @@
 FROM alpine:3.24.1
 
-RUN apk add postgresql18 postgresql18-contrib go
+RUN apk add postgresql18 postgresql18-contrib go py3-fastapi uvicorn
 
-RUN go install github.com/mingrammer/flog@latest
+# RUN go install github.com/mingrammer/flog@latest
+RUN go install github.com/mingrammer/flog@latest \
+    && install -m 755 "$(go env GOPATH)/bin/flog" /usr/local/bin/flog
 
 RUN install -d -o postgres -g postgres /run/postgresql
 
-COPY init-postgres.sh /init-postgres.sh
+COPY boot-env.sh /boot-env.sh
 
 # Accepte le script aussi bien avec des fins de ligne Windows (CRLF) que Linux (LF).
-RUN sed -i 's/\r$//' /init-postgres.sh
+RUN sed -i 's/\r$//' /boot-env.sh
 
 USER postgres
 
-CMD [ "/bin/sh", "/init-postgres.sh" ]
+CMD [ "/bin/sh", "/boot-env.sh" ]
