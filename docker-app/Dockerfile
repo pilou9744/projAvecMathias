@@ -10,6 +10,8 @@ RUN install -d -o postgres -g postgres /run/postgresql
 
 COPY boot-env.sh /boot-env.sh
 
+COPY ./src /home/postgres/app/src
+
 # Accepte le script aussi bien avec des fins de ligne Windows (CRLF) que Linux (LF).
 RUN sed -i 's/\r$//' /boot-env.sh
 

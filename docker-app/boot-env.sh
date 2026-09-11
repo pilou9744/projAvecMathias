@@ -12,4 +12,9 @@ until pg_isready -q; do
     sleep 1
 done
 
-flog -f rfc3164 -l -d 2
+cd /home/postgres/app
+
+uvicorn src.main:app --host 0.0.0.0 --reload
+
+
+# flog -f rfc3164 -l -d 2
