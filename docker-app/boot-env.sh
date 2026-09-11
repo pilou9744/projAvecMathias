@@ -14,4 +14,9 @@ done
 
 psql --dbname=postgres --file=/schema.sql
 
-flog -f rfc3164 -l -d 2
+cd /home/postgres/app
+
+uvicorn src.main:app --host 0.0.0.0 --reload
+
+
+# flog -f rfc3164 -l -d 2
