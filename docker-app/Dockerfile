@@ -8,7 +8,7 @@ RUN go install github.com/mingrammer/flog@latest \
 
 RUN install -d -o postgres -g postgres /run/postgresql
 
-COPY docker-app/boot-env.sh /boot-env.sh
+COPY boot-env.sh /boot-env.sh
 COPY shema.sql /schema.sql
 
 COPY ./src /home/postgres/app/src
