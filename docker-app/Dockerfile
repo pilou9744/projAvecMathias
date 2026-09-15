@@ -13,6 +13,8 @@ COPY shema.sql /schema.sql
 
 COPY ./src /home/postgres/app/src
 
+COPY ./src_flog /home/postgres/app/src_flog
+
 # Accepte le script aussi bien avec des fins de ligne Windows (CRLF) que Linux (LF).
 RUN sed -i 's/\r$//' /boot-env.sh
 
