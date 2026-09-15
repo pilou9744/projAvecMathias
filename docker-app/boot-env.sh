@@ -19,3 +19,7 @@ psql --dbname=postgres --file=/schema.sql
 cd /home/postgres/app/src
 
 uvicorn main:app --host 0.0.0.0 --reload
+
+cd /home/postgres/app/src_flog
+
+python3 flog_to_api.py
