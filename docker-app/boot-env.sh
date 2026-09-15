@@ -4,6 +4,8 @@ PGDATA=/var/lib/postgresql/data
 
 if [ ! -s "$PGDATA/PG_VERSION" ]; then
     initdb -D "$PGDATA"
+    echo "host all all 0.0.0.0/0 trust" >> "$PGDATA/pg_hba.conf"
+    echo "listen_addresses = '*'" >> "$PGDATA/postgresql.conf"
 fi
 
 postgres -D "$PGDATA" &
@@ -14,9 +16,6 @@ done
 
 psql --dbname=postgres --file=/schema.sql
 
-cd /home/postgres/app
+cd /home/postgres/app/src
 
-uvicorn src.main:app --host 0.0.0.0 --reload
-
-
-# flog -f rfc3164 -l -d 2
+uvicorn main:app --host 0.0.0.0 --reload
