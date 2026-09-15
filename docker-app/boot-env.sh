@@ -18,7 +18,7 @@ psql --dbname=postgres --file=/schema.sql
 
 cd /home/postgres/app/src
 
-uvicorn main:app --host 0.0.0.0 --reload
+uvicorn main:app --host 0.0.0.0 --reload &
 
 cd /home/postgres/app/src_flog
 
