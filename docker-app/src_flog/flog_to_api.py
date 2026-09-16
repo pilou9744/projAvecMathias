@@ -5,11 +5,23 @@ from urllib.request import Request, urlopen
 
 
 while True:
-    log = subprocess.check_output(["flog", "-n", "1", "-f", "rfc3164"], text=True).strip()
-    request = Request(
-        f"http://127.0.0.1:8000/logs?{urlencode({'log': log})}",
-        data=b"",
-        method="POST",
-    )
-    urlopen(request).close()
-    time.sleep(2)
+
+    time.sleep(15)
+
+
+    log = subprocess.check_output(
+        ["flog", "-n", "1", "-f", "rfc3164"],
+        text=True
+    ).strip()
+
+    log = log.split("]:", 1)[1].strip()
+
+    try :
+        request = Request(
+            f"http://127.0.0.1:8000/logs?{urlencode({'log': log})}",
+            data=b"",
+            method="POST",
+        )
+        urlopen(request).close()
+    except :
+        print("Y a un problème")

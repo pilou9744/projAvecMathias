@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS logs_API (
     id_log BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     description TEXT NOT NULL,
-    ia_Response TEXT,
+    ia_response TEXT,
     date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

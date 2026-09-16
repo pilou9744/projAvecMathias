@@ -1,6 +1,6 @@
 FROM alpine:3.24.1
 
-RUN apk add postgresql18 postgresql18-contrib go py3-fastapi py3-sqlalchemy py3-psycopg uvicorn
+RUN apk add postgresql18 postgresql18-contrib go py3-fastapi py3-sqlalchemy py3-psycopg py3-requests uvicorn
 
 # RUN go install github.com/mingrammer/flog@latest
 RUN go install github.com/mingrammer/flog@latest \

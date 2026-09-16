@@ -4,8 +4,6 @@ PGDATA=/var/lib/postgresql/data
 
 if [ ! -s "$PGDATA/PG_VERSION" ]; then
     initdb -D "$PGDATA"
-    echo "host all all 0.0.0.0/0 trust" >> "$PGDATA/pg_hba.conf"
-    echo "listen_addresses = '*'" >> "$PGDATA/postgresql.conf"
 fi
 
 postgres -D "$PGDATA" &
