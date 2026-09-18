@@ -8,7 +8,7 @@ time_between_logs = os.environ["TIME_BETWEEN_LOGS"]
 
 while True:
 
-    time.sleep(time_between_logs)
+    time.sleep(int(time_between_logs))
 
 
     log = subprocess.check_output(

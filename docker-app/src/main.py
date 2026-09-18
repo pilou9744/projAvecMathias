@@ -69,8 +69,8 @@ async def post_log(log: str, request: Request):
     client_ip = request.client.host if request.client else "unknown"
     check_rate_limit(client_ip)
 
-    log = log.strip()
-    if not log:
+    log_striped = log.strip()
+    if not log_striped:
         raise HTTPException(status_code=400, detail="Log vide")
     if len(log) > MAX_LOG_LENGTH:
         raise HTTPException(status_code=413, detail="Log trop long")
