@@ -1,4 +1,7 @@
-from fastapi import FastAPI, status
+from collections import defaultdict, deque
+from time import time
+
+from fastapi import FastAPI, HTTPException, Request, status
 from database import *
 from model import Logs_API
 from ai_request import make_ai_call
@@ -7,6 +10,27 @@ from sqlalchemy.orm import aliased
 import json
 
 app = FastAPI(swagger_ui_parameters={"syntaxHighlight": False})
+
+MAX_LOG_LENGTH = 500
+MAX_REQUESTS_PER_MINUTE = 10
+WINDOW_SECONDS = 60
+request_history = defaultdict(deque)
+
+
+def check_rate_limit(client_ip: str):
+    now = time()
+    history = request_history[client_ip]
+
+    while history and history[0] <= now - WINDOW_SECONDS:
+        history.popleft()
+
+    if len(history) >= MAX_REQUESTS_PER_MINUTE:
+        raise HTTPException(
+            status_code=429,
+            detail="Trop de requêtes. Réessayez plus tard."
+        )
+
+    history.append(now)
 
 @app.get("/health")
 async def get_health():
@@ -41,7 +65,15 @@ async def get_logs(max_count: int):
 
 
 @app.post("/logs", status_code=status.HTTP_201_CREATED)
-async def post_log(log: str) :
+async def post_log(log: str, request: Request):
+    client_ip = request.client.host if request.client else "unknown"
+    check_rate_limit(client_ip)
+
+    log = log.strip()
+    if not log:
+        raise HTTPException(status_code=400, detail="Log vide")
+    if len(log) > MAX_LOG_LENGTH:
+        raise HTTPException(status_code=413, detail="Log trop long")
 
     db = SessionLocal()
 
