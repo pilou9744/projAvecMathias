@@ -74,3 +74,11 @@ async def post_log(log: str) :
         db.close()
 
     return "Log created."
+
+@app.get("/alert")
+async def get_alerts():
+    db = SessionLocal()
+
+    response = db.get(Logs_API)
+
+    return "TODO A FINIR"
