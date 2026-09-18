@@ -85,7 +85,7 @@ Au demarrage, le script :
 
 - `id_log` : identifiant genere automatiquement et cle primaire ;
 - `description` : texte original du log, obligatoire ;
-- `ia_response` : mini-rapport produit par DeepSeek ;
+- `analysis` : mini-rapport produit par DeepSeek ;
 - `date_creation` : date de creation definie par PostgreSQL.
 
 ### SQLAlchemy
