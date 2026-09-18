@@ -5,3 +5,4 @@ services:
       - "8000:8000"
     environment:
       DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY}
+      TIME_BETWEEN_LOGS: ${TIME_BETWEEN_LOGS}

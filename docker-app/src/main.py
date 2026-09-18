@@ -2,7 +2,8 @@ from fastapi import FastAPI, status
 from database import *
 from model import Logs_API
 from ai_request import make_ai_call
-from sqlalchemy import func
+from sqlalchemy import func, select
+from sqlalchemy.orm import aliased
 import json
 
 app = FastAPI(swagger_ui_parameters={"syntaxHighlight": False})
@@ -19,9 +20,14 @@ async def get_health():
 async def get_logs(max_count: int):
     db = SessionLocal()
 
-    last_id = db.query(func.max(Logs_API.id_log)).scalar()
+    max = func.max(Logs_API.id_log)
 
-    response = [] 
+    last_id = db.query(max).scalar()
+
+    if(type(last_id) == type(None)) :
+        last_id = 0
+
+    response = []
 
     id = 0  
 
@@ -39,16 +45,13 @@ async def post_log(log: str) :
 
     db = SessionLocal()
 
-    # prompt = "Fais un mini rapport en une seule phrase du log que tu reçois." \
-    # "Voici le log : " + log
-
     prompt = "Réponds en format JSON strictement avec la syntaxe suivante :" \
     "{" \
     "\"analysis\" : \"Ton analyse\"," \
     "\"amogus\": \"false ou true\"" \
     "}" \
     "Le champ 'analysis' contient une analyse en une seule phrase du log que tu reçois," \
-    "et le 'amogus' est egal à 'True' si le log est suspect, et 'False' sinon." \
+    "et le 'amogus' doit strictement être égal à 'True' si le log est suspect ou malveillant, et 'False' sinon." \
     "Voici le log à analyser : " + log
 
     ai_response = make_ai_call(prompt=prompt)
@@ -79,6 +82,8 @@ async def post_log(log: str) :
 async def get_alerts():
     db = SessionLocal()
 
-    response = db.get(Logs_API)
+    query = select(Logs_API).where(Logs_API.amogus.is_(True))
 
-    return "TODO A FINIR"
+    response = db.execute(query)
+
+    return response.scalars().all()

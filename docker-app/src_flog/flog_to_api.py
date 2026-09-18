@@ -2,11 +2,13 @@ import subprocess
 import time
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
+import os
 
+time_between_logs = os.environ["TIME_BETWEEN_LOGS"]
 
 while True:
 
-    time.sleep(15)
+    time.sleep(time_between_logs)
 
 
     log = subprocess.check_output(
