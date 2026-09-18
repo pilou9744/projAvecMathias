@@ -37,20 +37,13 @@ docker-app/
 Depuis le dossier `docker-app/`, le lancement se fait avec :
 
 ```bash
-docker compose up --build
+docker compose up
 ```
 
-Une cle API DeepSeek doit etre disponible dans l'environnement avant le lancement :
+Une cle API DeepSeek (DEEPSEEK_API_KEY) et l'intervalle en seconde entre les logs (TIME_BETWEEN_LOGS) doivent etre disponibles dans l'environnement avant le lancement, soit en creant fichier .env dans le répertoire docker-app/, soit en executant :
 
 ```bash
-DEEPSEEK_API_KEY=ta_cle docker compose up --build
-```
-
-Sous PowerShell :
-
-```powershell
-$env:DEEPSEEK_API_KEY = "ta_cle"
-docker compose up --build
+DEEPSEEK_API_KEY=ta_cle TIME_BETWEEN_LOGS=x docker compose up
 ```
 
 L'API est ensuite accessible sur `http://localhost:8000`. Sa documentation interactive FastAPI est disponible sur `/docs`.
